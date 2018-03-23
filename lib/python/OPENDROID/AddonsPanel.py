@@ -147,10 +147,10 @@ class AddonsUtility(Screen):
 class	AddonsRemove(Screen):
 	
 	skin = """
-               <screen name="AddonsRemove" position="80,160" size="1100,450" title="Deinstalliere Plugins">
+               <screen name="AddonsRemove" position="80,160" size="1100,450" title="Remove Plugins">
 				<widget name="list" position="5,0" size="560,300" itemHeight="49" foregroundColor="white" backgroundColor="black" transparent="1" scrollbarMode="showOnDemand" zPosition="2" enableWrapAround="1" />
 				<widget name="status" position="580,43" size="518,300" font="Regular;16" halign="center" noWrap="1" transparent="1" />
-				<eLabel name="" position="580,6" size="517,30" font="Regular; 22" text="Remove plugin" zPosition="3" halign="center" />
+				<eLabel name="" position="580,6" size="517,30" font="Regular; 22"text="List of plugins to uninstall" zPosition="3" halign="center" />
 				<widget name="text" position="580,345" size="519,60" zPosition="1" font="Regular;20" halign="center" valign="center" foregroundColor="green" transparent="1" />
 				<widget name="key_green" render="Label" position="46,366" zPosition="2" size="190,22" valign="center" halign="left" font="Regular;21" transparent="1" backgroundColor="foreground" />
 				<ePixmap position="5,365" size="35,27" pixmap="/usr/share/enigma2/skin_default/buttons/key_green.png" alphatest="blend" zPosition="2" />
@@ -637,7 +637,7 @@ class Installer_Addons(Screen):
 		Screen.__init__(self, session)
 		self['infotext'] = ScrollLabel('') #testo log addons
 		self['info'] = Label() #testo mancata connessione
-		self['actions'] = ActionMap(['OkCancelActions'], 
+		self['actions'] = ActionMap(['OkCancelActions'],
 		{'ok': self.close, 
 		 'cancel': self.close,
 		 }, -1)
@@ -661,7 +661,7 @@ class Installer_Addons(Screen):
 		except:
 			self['info'].setText("Installation failed!\nPlease check internet connection.")
 			
-           
+
 	def viewLog(self):
 		strview = ''#testo del log vuoto
 		print 'In viewLog'

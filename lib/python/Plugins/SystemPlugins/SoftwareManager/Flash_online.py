@@ -20,6 +20,8 @@ from Screens.HelpMenu import HelpableScreen
 from Screens.TaskView import JobView
 from Tools.Downloader import downloadWithProgress
 from enigma import fbClass
+import urllib
+from urllib2 import Request, urlopen, URLError, HTTPError
 import urllib2
 import os
 import shutil
@@ -38,8 +40,7 @@ MTDROOTFS = getMachineMtdRoot()
 images = []
 global imagesCounter
 imagesCounter = 0
-images.append(["OPD 6.4", "http://images.opendroid.org/6.4"])
-
+images.append(["OPD 6.5", "http://images.opendroid.org/6.5"])
 imagePath = '/media/hdd/images'
 flashPath = '/media/hdd/images/flash'
 flashTmp = '/media/hdd/images/tmp'
@@ -82,7 +83,7 @@ class FlashOnline(Screen):
 
 		Screen.setTitle(self, _("Flash On the Fly"))
 		if SystemInfo["HaveMultiBoot"]:
-			self["key_blue"] = Button(_("Multiboot Select"))
+			self["key_blue"] = Button(_("STARTUP"))
 		else:
 			self["key_blue"] = Button(_(" "))
 		self["key_green"] = Button(_("Online"))
@@ -124,7 +125,6 @@ class FlashOnline(Screen):
 				os.mkdir(imagePath)
 			except:
 				pass
-
 		if os.path.exists(flashPath):
 			try:
 				os.system('rm -rf ' + flashPath)
@@ -138,7 +138,6 @@ class FlashOnline(Screen):
 
 	def quit(self):
 		self.close()
-
 	def yellow(self):
 		if self.check_hdd():
 			self.session.open(doFlashImage, online = False, list=self.list[self.selection], multi=self.multi, devrootfs=self.devrootfs)
@@ -220,7 +219,6 @@ class doFlashImage(Screen):
 		<widget name="key_blue" position="420,460" zPosition="2" size="140,40" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />
 		<widget name="imageList" position="10,10" zPosition="1" size="680,450" font="Regular;20" scrollbarMode="showOnDemand" transparent="1" />
 	</screen>"""
-
 	def __init__(self, session, online, list=None, multi=None, devrootfs=None ):
 		Screen.__init__(self, session)
 		self.session = session
@@ -301,8 +299,6 @@ class doFlashImage(Screen):
 			box = box[0:3] + 'x00'
 		elif box == "odinm9":
 			box = 'maram9'
-		elif box == "dm525":
-			box = 'dm520'
 		return box
 
 	def getSel(self):
@@ -337,6 +333,7 @@ class doFlashImage(Screen):
 	def startInstallOnline(self, ret = None):
 		box = self.box()
 		brand = getMachineBrand()
+		box = getBoxType()
 		self.hide()
 		if self.Online:
 			if self.imagesCounter == 0:
@@ -462,13 +459,8 @@ class doFlashImage(Screen):
 			self.show()
 
 	def unzip_image(self, filename, path):
-		if getBoxType() in "dm7080" "dm820" "dm520" "dm525":
-			print "Untaring %s to %s" %(filename,path)
-			os.system('mkdir /dbackup.new')
-			self.session.openWithCallback(self.cmdFinished, Console, title = _("Untaring files, Please wait ..."), cmdlist = ['tar -xJf ' + filename + ' -C ' + '/dbackup.new', "sleep 3"], closeOnSuccess = True)
-		else:
-			print "Unzip %s to %s" %(filename,path)
-			self.session.openWithCallback(self.cmdFinished, Console, title = _("Unzipping files, Please wait ..."), cmdlist = ['unzip ' + filename + ' -o -d ' + path, "sleep 3"], closeOnSuccess = True)
+		print "Unzip %s to %s" %(filename,path)
+		self.session.openWithCallback(self.cmdFinished, Console, title = _("Unzipping files, Please wait ..."), cmdlist = ['unzip ' + filename + ' -o -d ' + path, "sleep 3"], closeOnSuccess = True)
 
 	def cmdFinished(self):
 		self.prepair_flashtmp(flashPath)
@@ -485,6 +477,8 @@ class doFlashImage(Screen):
 					cmdlist.append("%s -n -r -k -m%s %s > /dev/null 2>&1" % (ofgwritePath, self.multi, flashTmp))
 				elif getMachineBuild() in ("u5","u5pvr"):
 					cmdlist.append("%s -n -r%s -k%s %s > /dev/null 2>&1" % (ofgwritePath, MTDROOTFS, MTDKERNEL, flashTmp))
+				elif getMachineBuild() in ("h9"):
+					cmdlist.append("%s -n -f -r -k %s > /dev/null 2>&1" % (ofgwritePath, flashTmp))
 				else:
 					cmdlist.append("%s -n -r -k %s > /dev/null 2>&1" % (ofgwritePath, flashTmp))
 				self.close()
@@ -502,6 +496,8 @@ class doFlashImage(Screen):
 						cmdlist.append("umount -fl /newroot")
 				elif getMachineBuild() in ("u5","u5pvr"):
 					cmdlist.append("%s -r%s -k%s %s > /dev/null 2>&1" % (ofgwritePath, MTDROOTFS, MTDKERNEL, flashTmp))
+				elif getMachineBuild() in ("h9"):
+					cmdlist.append("%s -f -r -k %s > /dev/null 2>&1" % (ofgwritePath, flashTmp))
 				else:
 					cmdlist.append("%s -r -k %s > /dev/null 2>&1" % (ofgwritePath, flashTmp))
 				message = "echo -e '\n"
@@ -532,6 +528,7 @@ class doFlashImage(Screen):
 			os.mkdir(flashTmp)
 		kernel = True
 		rootfs = True
+		
 		for path, subdirs, files in os.walk(tmpPath):
 			for name in files:
 				if name.find('kernel') > -1 and name.endswith('.bin') and kernel:
@@ -539,7 +536,7 @@ class doFlashImage(Screen):
 					dest = flashTmp + '/%s' %KERNELBIN
 					shutil.copyfile(binfile, dest)
 					kernel = False
-				elif name.find('root') > -1 and (name.endswith('.bin') or name.endswith('.jffs2') or name.endswith('.bz2')) and rootfs:
+				elif name.find('root') > -1 and (name.endswith('.bin') or name.endswith('.ubi') or name.endswith('.jffs2') or name.endswith('.bz2')) and rootfs:
 					binfile = os.path.join(path, name)
 					dest = flashTmp + '/%s' %ROOTFSBIN
 					shutil.copyfile(binfile, dest)
@@ -554,6 +551,7 @@ class doFlashImage(Screen):
 					dest = flashTmp + '/e2jffs2.img'
 					shutil.copyfile(binfile, dest)
 					rootfs = False
+					
 	def yellow(self):
 		if not self.Online:
 			self.session.openWithCallback(self.DeviceBrowserClosed, DeviceBrowser, None, matchingPattern="^.*\.(zip|bin|jffs2|img)", showDirectories=True, showMountpoints=True, inhibitMounts=["/autofs/sr0/"])
@@ -587,7 +585,7 @@ class doFlashImage(Screen):
 			os.mkdir(flashTmp)
 			if binorzip == 0:
 				for files in os.listdir(self.imagePath):
-					if files.endswith(".bin") or files.endswith('.jffs2') or files.endswith('.img'):
+					if files.endswith(".ubi") or files.endswith(".bin") or files.endswith('.jffs2') or files.endswith('.img'):
 						self.prepair_flashtmp(strPath)
 						break
 				self.Start_Flashing()
@@ -595,15 +593,17 @@ class doFlashImage(Screen):
 				self.unzip_image(strPath + '/' + filename, flashPath)
 			else:
 				self.layoutFinished()
+	
 		else:
 			self.imagePath = imagePath
 
 	def layoutFinished(self):
 		box = self.box()
 		brand = getMachineBrand()
+		box = getBoxType()
 		self.imagelist = []
 		if self.Online:
-			self["key_yellow"].setText("")
+			self["key_yellow"].setText("Backup&Flash")
 			self.feedurl = images[self.imagesCounter][1]
 			self["key_blue"].setText(images[self.imagesCounter][0])
 			if self.imagesCounter == 0:
@@ -643,12 +643,10 @@ class doFlashImage(Screen):
 			for name in os.listdir(self.imagePath):
 				if name.endswith(".zip") or name.endswith(".xz"): # and name.find(box) > 1:
 					self.imagelist.append(name)
-#				if name.find(box):
-#					self.imagelist.append(name)
 			self.imagelist.sort()
 			if os.path.exists(flashTmp):
 				for file in os.listdir(flashTmp):
-					if file.find(".bin") > -1:
+					if file.find(".bin")> -1 or file.find(".ubi")> -1:
 						self.imagelist.insert( 0, str(flashTmp))
 						break
 
@@ -662,7 +660,7 @@ class doFlashImage(Screen):
 
 class ImageDownloadJob(Job):
 	def __init__(self, url, filename, file):
-		Job.__init__(self, _("Downloading %s" %file))
+		Job.__init__(self, _("Downloading %s") %file)
 		ImageDownloadTask(self, url, filename)
 
 class DownloaderPostcondition(Condition):
@@ -701,7 +699,7 @@ class ImageDownloadTask(Task):
 	def download_progress(self, recvbytes, totalbytes):
 		if ( recvbytes - self.last_recvbytes  ) > 100000: # anti-flicker
 			self.progress = int(100*(float(recvbytes)/float(totalbytes)))
-			self.name = _("Downloading") + ' ' + "%d of %d kBytes" % (recvbytes/1024, totalbytes/1024)
+			self.name = _("Downloading") + ' ' + _("%d of %d kBytes") % (recvbytes/1024, totalbytes/1024)
 			self.last_recvbytes = recvbytes
 
 	def download_failed(self, failure_instance=None, error_message=""):
@@ -777,7 +775,7 @@ class DeviceBrowser(Screen, HelpableScreen):
 	def use(self):
 		print "[use]", self["filelist"].getCurrentDirectory(), self["filelist"].getFilename()
 		if self["filelist"].getFilename() is not None and self["filelist"].getCurrentDirectory() is not None:
-			if self["filelist"].getFilename().endswith(".bin") or self["filelist"].getFilename().endswith(".jffs2"):
+			if self["filelist"].getFilename().endswith(".bin") or self["filelist"].getFilename().endswith(".ubi") or self["filelist"].getFilename().endswith(".jffs2"):
 				self.close(self["filelist"].getCurrentDirectory(), self["filelist"].getFilename(), 0)
 			elif self["filelist"].getFilename().endswith(".zip"):
 				self.close(self["filelist"].getCurrentDirectory(), self["filelist"].getFilename(), 1)
