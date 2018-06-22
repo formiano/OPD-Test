@@ -37,7 +37,7 @@ AM_CONDITIONAL(HAVE_FAKE_GIT_DIR, test -f "$srcdir/.git/last_commit_info")
 dnl versions of gstreamer and plugins-base
 AC_ARG_WITH(gstversion,
 	AS_HELP_STRING([--with-gstversion],[use gstreamer version (major.minor)]),
-	[GST_MAJORMINOR=$withval],[GST_MAJORMINOR=0.10])
+	[GST_MAJORMINOR=$withval],[GST_MAJORMINOR=1.0])
 
 PKG_CHECK_MODULES(GSTREAMER, gstreamer-$GST_MAJORMINOR gstreamer-pbutils-$GST_MAJORMINOR)
 PKG_CHECK_MODULES(BASE, [freetype2 fribidi gstreamer-$GST_MAJORMINOR gstreamer-pbutils-$GST_MAJORMINOR libdvbsi++ libpng libxml-2.0 sigc++-2.0 libssl libcrypto])
@@ -866,6 +866,20 @@ lib/python/Plugins/Extensions/MediaPlayer/meta/Makefile
 lib/python/Plugins/Extensions/MediaScanner/Makefile
 lib/python/Plugins/Extensions/MediaScanner/meta/Makefile
 lib/python/Plugins/Extensions/MiniTV/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/bin/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/images/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/ubi_reader/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/ubi_reader/ubi/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/ubi_reader/ubi/volume/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/ubi_reader/ubi/headers/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/ubi_reader/ubi/block/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/ubi_reader/ubifs/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/ubi_reader/ubifs/nodes/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/ubi_reader/ubi_io/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/ubi_reader/ui/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/OPDDBoot_client/Makefile
+lib/python/Plugins/Extensions/OPDDBoot/OPDDBoot_client/images/Makefile
 lib/python/Plugins/Extensions/PicturePlayer/Makefile
 lib/python/Plugins/Extensions/PicturePlayer/meta/Makefile
 lib/python/Plugins/Extensions/QuadPip/Makefile
