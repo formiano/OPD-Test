@@ -250,6 +250,16 @@ AC_ARG_WITH(machinebuild,
 AC_SUBST(MACHINEBUILD)
 AC_DEFINE_UNQUOTED(MACHINEBUILD,"$MACHINEBUILD",[machine build])
 
+AC_ARG_WITH(arch,
+	[  --with-arch=NAME box arch [[none,ah4,mipsel...]]],
+	[ARCH="$withval"],[ARCH="mipsel"])
+AC_SUBST(ARCH)
+AC_DEFINE_UNQUOTED(ARCH,"$ARCH",[box arch])
+
+AM_CONDITIONAL(SH4, test `echo "$ARCH" | cut -b 1-3` == "sh4")
+AM_CONDITIONAL(MIPSEL, test `echo "$ARCH" | cut -b 1-6` == "mipsel")
+AM_CONDITIONAL(ARM, test `echo "$ARCH" | cut -b 1-3` == "arm")
+
 AC_ARG_WITH(libvugles2,
 	AS_HELP_STRING([--with-libvugles2],[use libvugles2, yes or no]),
 	[with_libvugles2=$withval],[with_libvugles2=no])
