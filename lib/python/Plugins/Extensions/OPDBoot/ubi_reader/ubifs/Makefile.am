@@ -5,8 +5,3 @@ install_PYTHON = *.py \
 if HAVE_MB4K
 install_DATA = *.txt
 endif
-
-if HAVE_MIPSEL
-install_DATA = \
-	lzo.so
-endif
