@@ -6,7 +6,7 @@ if HAVE_MB4K
 install_DATA = *.txt
 endif
 
-if MIPSEL
+if HAVE_MIPSEL
 install_DATA = \
 	lzo.so
 endif

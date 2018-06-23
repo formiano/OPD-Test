@@ -256,9 +256,9 @@ AC_ARG_WITH(arch,
 AC_SUBST(ARCH)
 AC_DEFINE_UNQUOTED(ARCH,"$ARCH",[box arch])
 
-AM_CONDITIONAL(SH4, test `echo "$ARCH" | cut -b 1-3` == "sh4")
-AM_CONDITIONAL(MIPSEL, test `echo "$ARCH" | cut -b 1-6` == "mipsel")
-AM_CONDITIONAL(ARM, test `echo "$ARCH" | cut -b 1-3` == "arm")
+AM_CONDITIONAL(HAVE_SH4, test `echo "$ARCH" | cut -b 1-3` == "sh4")
+AM_CONDITIONAL(HAVE_MIPSEL, test `echo "$ARCH" | cut -b 1-6` == "mipsel")
+AM_CONDITIONAL(HAVE_ARM, test `echo "$ARCH" | cut -b 1-3` == "arm")
 
 AC_ARG_WITH(libvugles2,
 	AS_HELP_STRING([--with-libvugles2],[use libvugles2, yes or no]),
