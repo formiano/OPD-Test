@@ -250,16 +250,6 @@ AC_ARG_WITH(machinebuild,
 AC_SUBST(MACHINEBUILD)
 AC_DEFINE_UNQUOTED(MACHINEBUILD,"$MACHINEBUILD",[machine build])
 
-AC_ARG_WITH(arch,
-	[  --with-arch=NAME box arch [[none,ah4,mipsel...]]],
-	[ARCH="$withval"],[ARCH="mipsel"])
-AC_SUBST(ARCH)
-AC_DEFINE_UNQUOTED(ARCH,"$ARCH",[box arch])
-
-AM_CONDITIONAL(HAVE_SH4, test `echo "$ARCH" | cut -b 1-3` == "sh4")
-AM_CONDITIONAL(HAVE_MIPSEL, test `echo "$ARCH" | cut -b 1-6` == "mipsel")
-AM_CONDITIONAL(HAVE_ARM, test `echo "$ARCH" | cut -b 1-3` == "arm")
-
 AC_ARG_WITH(libvugles2,
 	AS_HELP_STRING([--with-libvugles2],[use libvugles2, yes or no]),
 	[with_libvugles2=$withval],[with_libvugles2=no])
@@ -877,20 +867,6 @@ lib/python/Plugins/Extensions/MediaPlayer/meta/Makefile
 lib/python/Plugins/Extensions/MediaScanner/Makefile
 lib/python/Plugins/Extensions/MediaScanner/meta/Makefile
 lib/python/Plugins/Extensions/MiniTV/Makefile
-lib/python/Plugins/Extensions/OPDBoot/Makefile
-lib/python/Plugins/Extensions/OPDBoot/bin/Makefile
-lib/python/Plugins/Extensions/OPDBoot/images/Makefile
-lib/python/Plugins/Extensions/OPDBoot/ubi_reader/Makefile
-lib/python/Plugins/Extensions/OPDBoot/ubi_reader/ubi/Makefile
-lib/python/Plugins/Extensions/OPDBoot/ubi_reader/ubi/volume/Makefile
-lib/python/Plugins/Extensions/OPDBoot/ubi_reader/ubi/headers/Makefile
-lib/python/Plugins/Extensions/OPDBoot/ubi_reader/ubi/block/Makefile
-lib/python/Plugins/Extensions/OPDBoot/ubi_reader/ubifs/Makefile
-lib/python/Plugins/Extensions/OPDBoot/ubi_reader/ubifs/nodes/Makefile
-lib/python/Plugins/Extensions/OPDBoot/ubi_reader/ubi_io/Makefile
-lib/python/Plugins/Extensions/OPDBoot/ubi_reader/ui/Makefile
-lib/python/Plugins/Extensions/OPDBoot/OPDBoot_client/Makefile
-lib/python/Plugins/Extensions/OPDBoot/OPDBoot_client/images/Makefile
 lib/python/Plugins/Extensions/PicturePlayer/Makefile
 lib/python/Plugins/Extensions/PicturePlayer/meta/Makefile
 lib/python/Plugins/Extensions/QuadPip/Makefile
