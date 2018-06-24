@@ -117,8 +117,8 @@ class OPDBootInstallation(Screen):
     def devpanel(self):
         try:
 
-            from OPENDROID.MountManager import MountManager
-            self.session.open(MountManager)
+            from OPENDROID.MountManager import DeviceManager
+            self.session.open(DeviceManager)
         except:
             self.session.open(MessageBox, _('You are not running opendroid Image. You must mount devices Your self.'), MessageBox.TYPE_INFO)
 
