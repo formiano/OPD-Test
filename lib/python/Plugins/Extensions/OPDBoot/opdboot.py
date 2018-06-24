@@ -12,44 +12,44 @@ extensions_path_extractpyo = extensions_path_extractpy + 'o'
 dev_null = ' > /dev/null 2>&1'
 
 def OPDBootMainEx(source, target, installsettings, bootquest, zipdelete, getimagefolder, getMachineRootFile, getImageArch):
-    media_nfr_target = mediahome + target
-    list_one = ['rm -r ' + media_nfr_target + dev_null,
-                'mkdir ' + media_nfr_target + dev_null, 
-                'chmod -R 0777 ' + media_nfr_target]
+    media_opendroid_target = mediahome + target
+    list_one = ['rm -r ' + media_opendroid_target + dev_null,
+                'mkdir ' + media_opendroid_target + dev_null, 
+                'chmod -R 0777 ' + media_opendroid_target]
     
     for command in list_one:
         os.system(command)
     
     rc = OPDBootExtract(source, target, zipdelete, getimagefolder, getMachineRootFile, getImageArch)
     
-    list_two = ['mkdir -p ' + media_nfr_target + '/media' + dev_null,
-                'rm ' + media_nfr_target + media_nf + dev_null, 
-                'rmdir ' + media_nfr_target + media_nf + dev_null,
-                'mkdir -p ' + media_nfr_target + media_nf + dev_null,
-                'cp /etc/network/interfaces ' + media_nfr_target + '/etc/network/interfaces' + dev_null,
-                'cp /etc/passwd ' + media_nfr_target + '/etc/passwd' + dev_null,
-                'cp /etc/resolv.conf ' + media_nfr_target + '/etc/resolv.conf' + dev_null,
-                'cp /etc/wpa_supplicant.conf ' + media_nfr_target + '/etc/wpa_supplicant.conf' + dev_null,
-                'rm -rf ' + media_nfr_target + extensions_path + 'HbbTV',
-                'cp -r ' + extensions_path + 'OPDBoot/OPDBoot_client ' + media_nfr_target + extensions_path + dev_null,
-                'cp -r ' + extensions_path + 'OPDBoot/.opdboot_location ' + media_nfr_target + extensions_path + 'OPDBoot_client/.opdboot_location' + dev_null]
+    list_two = ['mkdir -p ' + media_opendroid_target + '/media' + dev_null,
+                'rm ' + media_opendroid_target + media_nf + dev_null, 
+                'rmdir ' + media_opendroid_target + media_nf + dev_null,
+                'mkdir -p ' + media_opendroid_target + media_nf + dev_null,
+                'cp /etc/network/interfaces ' + media_opendroid_target + '/etc/network/interfaces' + dev_null,
+                'cp /etc/passwd ' + media_opendroid_target + '/etc/passwd' + dev_null,
+                'cp /etc/resolv.conf ' + media_opendroid_target + '/etc/resolv.conf' + dev_null,
+                'cp /etc/wpa_supplicant.conf ' + media_opendroid_target + '/etc/wpa_supplicant.conf' + dev_null,
+                'rm -rf ' + media_opendroid_target + extensions_path + 'HbbTV',
+                'cp -r ' + extensions_path + 'OPDBoot/OPDBoot_client ' + media_opendroid_target + extensions_path + dev_null,
+                'cp -r ' + extensions_path + 'OPDBoot/.opdboot_location ' + media_opendroid_target + extensions_path + 'OPDBoot_client/.opdboot_location' + dev_null]
                 
     for command in list_two:
         os.system(command)
     
     if installsettings == "True":
         
-        list_three = ['mkdir -p ' + media_nfr_target + '/etc/enigma2' + dev_null,
-                      'cp -f /etc/enigma2/* ' + media_nfr_target + '/etc/enigma2/',
-                      'cp -f /etc/tuxbox/* ' + media_nfr_target + '/etc/tuxbox/']
+        list_three = ['mkdir -p ' + media_opendroid_target + '/etc/enigma2' + dev_null,
+                      'cp -f /etc/enigma2/* ' + media_opendroid_target + '/etc/enigma2/',
+                      'cp -f /etc/tuxbox/* ' + media_opendroid_target + '/etc/tuxbox/']
         for command in list_three:
             os.system(command)
         
-    os.system('mkdir -p ' + media_nfr_target + '/media/usb' + dev_null)
+    os.system('mkdir -p ' + media_opendroid_target + '/media/usb' + dev_null)
     
     list_four = ['/etc/fstab', '/usr/lib/enigma2/python/Components/config.py', '/usr/lib/enigma2/python/Tools/HardwareInfoVu.py']
     for entrie in list_four:
-        filename = media_nfr_target + entrie
+        filename = media_opendroid_target + entrie
         tempfile = filename + '.tmp'
         if os.path.exists(filename):
                 out = open(tempfile, 'w')
@@ -75,18 +75,18 @@ def OPDBootMainEx(source, target, installsettings, bootquest, zipdelete, getimag
                 out.close()
                 os.rename(tempfile, filename)
     
-    tpmd = media_nfr_target + '/etc/init.d/tpmd'
+    tpmd = media_opendroid_target + '/etc/init.d/tpmd'
     if os.path.exists(tpmd):
        os.remove(tpmd)
     
     
-    filename = media_nfr_target + '/etc/bhversion'
+    filename = media_opendroid_target + '/etc/bhversion'
     if os.path.exists(filename):
        os.system('echo "BlackHole 2.0.9" > ' + filename)
     
-    mypath = media_nfr_target + '/usr/lib/opkg/info/'
+    mypath = media_opendroid_target + '/usr/lib/opkg/info/'
     if not os.path.exists(mypath):
-       mypath = media_nfr_target + '/var/lib/opkg/info/'
+       mypath = media_opendroid_target + '/var/lib/opkg/info/'
         
     for file_name in os.listdir(mypath):
         
@@ -113,7 +113,7 @@ def OPDBootMainEx(source, target, installsettings, bootquest, zipdelete, getimag
         out = open(mediahome + '.opdboot', 'w')
         out.write(target)
         out.close()
-        os.system('touch /tmp/.opennfrreboot; sync; reboot -p')        
+        os.system('touch /tmp/.opendroidreboot; sync; reboot -p')        
     else: 
         out = open(mediahome + '.opdboot', 'w')
         out.write(target)

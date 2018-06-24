@@ -19,7 +19,7 @@ from Tools.LoadPixmap import LoadPixmap
 from Tools.Directories import fileExists
 import os
 from skin import parseColor
-PLUGINVERSION = '1.00'
+PLUGINVERSION = '2.0 - 2.03.2018 - Opendroid Team'
 OPDBootInstallation_Skin = '\n\t\t<screen name="OPDBootInstallation" position="center,center" size="902,380" title="OPDBoot - Installation" >\n\t\t      <widget name="label1" position="10,10" size="840,30" zPosition="1" halign="center" font="Regular;25" backgroundColor="#9f1313" transparent="1"/>\n\t\t      <widget name="label2" position="10,80" size="840,290" zPosition="1" halign="center" font="Regular;20" backgroundColor="#9f1313" transparent="1"/>\n\t\t      <widget name="config" position="10,160" size="840,200" scrollbarMode="showOnDemand" transparent="1"/>\n\t\t      <ePixmap pixmap="skin_default/buttons/red.png" position="10,290" size="140,40" alphatest="on" />\n\t\t      <ePixmap pixmap="skin_default/buttons/green.png" position="150,290" size="140,40" alphatest="on" />\n\t\t      <ePixmap pixmap="skin_default/buttons/blue.png" position="300,290" size="140,40" alphatest="on" />\n\t\t      <widget name="key_red" position="10,290" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t      <widget name="key_green" position="150,290" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t      <widget name="key_blue" position="300,290" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />\n\t\t</screen>'
 OPDBootImageChoose_Skin = '\n\t\t<screen name="OPDBootImageChoose" position="center,center" size="902,380" title="OPDBoot - Menu">\n\t\t\t<widget name="label2" position="145,10" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label3" position="145,35" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label4" position="145,60" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label5" position="145,85" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label6" position="420,10" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label7" position="420,35" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label8" position="420,60" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label9" position="420,85" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label10" position="145,110" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label11" position="420,110" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label1" position="25,145" size="840,22" zPosition="1" halign="center" font="Regular;18" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="device_icon" position="25,20" size="80,80" alphatest="on" />\n\t\t\t<widget name="free_space_progressbar" position="265,42" size="500,13" borderWidth="1" zPosition="3" />\n\t\t\t<widget name="config" position="25,180" size="840,150" scrollbarMode="showOnDemand" />\n\t\t\t<ePixmap pixmap="skin_default/buttons/red.png" position="10,340" size="150,40" alphatest="on" />\n\t\t\t<ePixmap pixmap="skin_default/buttons/green.png" position="185,340" size="150,40" alphatest="on" />\n\t\t\t<ePixmap pixmap="skin_default/buttons/yellow.png" position="360,340" size="150,40" alphatest="on" />\n\t\t\t<ePixmap pixmap="skin_default/buttons/blue.png" position="535,340" size="150,40" alphatest="on" />\n\t\t\t<widget name="key_red" position="5,center" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="key_green" position="180,340" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="key_yellow" position="355,340" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />\n\t\t\t<widget name="key_blue" position="530,340" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />\n\t\t<widget name="key_menu" position="705,340" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" /><ePixmap pixmap="skin_default/buttons/menu.png" position="710,340" size="150,40" alphatest="on" /></screen>'
 OPDBootImageInstall_Skin = '\n\t\t    <screen name="OPDBootImageInstall" position="center,center" size="770,340" title="OPDBoot - Image Installation" >\n\t\t\t      <widget name="config" position="10,10" size="750,220" scrollbarMode="showOnDemand" transparent="1"/>\n\t\t\t      <ePixmap pixmap="skin_default/buttons/red.png" position="10,290" size="140,40" alphatest="on" />\n\t\t\t      <ePixmap pixmap="skin_default/buttons/green.png" position="150,290" size="140,40" alphatest="on" />\n\t\t\t      <ePixmap pixmap="skin_default/buttons/yellow.png" position="290,290" size="140,40" alphatest="on" />\n\t\t\t      <widget name="HelpWindow" position="330,310" zPosition="5" size="1,1" transparent="1" alphatest="on" />      \n\t\t\t      <widget name="key_red" position="10,290" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t\t      <widget name="key_green" position="150,290" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t\t      <widget name="key_yellow" position="290,290" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />\n\t\t    </screen>'
@@ -50,14 +50,26 @@ class OPDBootInstallation(Screen):
         self.updateList()
 
     def updateList(self):
-        myusb, myhdd, mymmc = ('', '', '')
+        mycf, myusb, myusb2, myusb3, mysd, myhdd, mymmc = ('', '', '', '', '', '')
         myoptions = []
         if fileExists('/proc/mounts'):
             fileExists('/proc/mounts')
             f = open('/proc/mounts', 'r')
             for line in f.readlines():
+                if line.find('/media/cf') != -1:
+                    mycf = '/media/cf/'
+                    continue
                 if line.find('/media/usb') != -1:
                     myusb = '/media/usb/'
+                    continue
+                if line.find('/media/usb2') != -1:
+                    myusb2 = '/media/usb2/'
+                    continue
+                if line.find('/media/usb3') != -1:
+                    myusb3 = '/media/usb3/'
+                    continue
+                if line.find('/media/card') != -1:
+                    mysd = '/media/card/'
                     continue
                 if line.find('/media/mmc') != -1:
                     mymmc = '/media/mmc/'
@@ -70,6 +82,10 @@ class OPDBootInstallation(Screen):
         else:
             self['label2'].setText(_('Sorry it seems that there are not Linux formatted devices mounted on your STB. To install OPDBoot you need a Linux formatted part1 device. Click on the blue button to open OPD Devices Panel'))
             fileExists('/proc/mounts')
+        if mycf:
+            self.list.append(mycf)
+        else:
+            mycf
         if myusb:
             self.list.append(myusb)
         else:
@@ -78,6 +94,19 @@ class OPDBootInstallation(Screen):
             self.list.append(mymmc)
         else:
             mymmc
+        if myusb2:
+            self.list.append(myusb2)
+        else:
+            myusb2
+        if myusb3:
+            self.list.append(myusb3)
+        else:
+            myusb3
+        if mysd:
+            mysd
+            self.list.append(mysd)
+        else:
+            mysd
         if myhdd:
             myhdd
             self.list.append(myhdd)
@@ -87,11 +116,11 @@ class OPDBootInstallation(Screen):
 
     def devpanel(self):
         try:
-			####ersetzen mit unseren Mountmanager####
-            from Screens.HddSetup import HddSetup
-            self.session.open(HddSetup)
+
+            from OPENDROID.MountManager import MountManager
+            self.session.open(MountManager)
         except:
-            self.session.open(MessageBox, _('You are not running OPD Image. You must mount devices Your self.'), MessageBox.TYPE_INFO)
+            self.session.open(MessageBox, _('You are not running opendroid Image. You must mount devices Your self.'), MessageBox.TYPE_INFO)
 
     def myclose(self):
         self.close()
@@ -138,10 +167,22 @@ class OPDBootInstallation(Screen):
             fileExists('/proc/mounts')
             f = open('/proc/mounts', 'r')
             for line in f.readlines():
+                if line.find('/media/cf') != -1:
+                    check = True
+                    continue
                 if line.find('/media/usb') != -1:
                     check = True
                     continue
                 if line.find('/media/mmc') != -1:
+                    check = True
+                    continue
+                if line.find('/media/usb2') != -1:
+                    check = True
+                    continue
+                if line.find('/media/usb3') != -1:
+                    check = True
+                    continue
+                if line.find('/media/card') != -1:
                     check = True
                     continue
                 if line.find('/hdd') != -1:

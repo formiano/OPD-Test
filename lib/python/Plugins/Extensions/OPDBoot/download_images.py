@@ -71,11 +71,11 @@ class OPDChooseOnLineImage(Screen):
         self.list = []
         mypath = resolveFilename(SCOPE_PLUGINS)
         mypath = mypath + 'Extensions/OPDBoot/images/'
-        mypixmap = mypath + 'opennfr.png'
+        mypixmap = mypath + 'opendroid.png'
         png = LoadPixmap(mypixmap)
-        name = _('NFR')
-        desc = _('Download latest NFR Image')
-        idx = 'opennfr'
+        name = _('opendroid Current')
+        desc = _('Download latest opendroid Image')
+        idx = 'opendroid'
         res = (name,
          png,
          idx,
@@ -171,16 +171,16 @@ class OPDChooseOnLineImage(Screen):
          idx,
          desc)
         self.list.append(res)
-        mypixmap = mypath + 'opendroid.png'
+        mypixmap = mypath + 'opennfr.png'
         png = LoadPixmap(mypixmap)
-        name = _('Opendroid')
-        desc = _('Download latest Opendroid Image')
-        idx = 'opendroid'
+        name = _('opennfr')
+        desc = _('Download latest opennfr Image')
+        idx = 'opennfr'
         res = (name,
          png,
          idx,
          desc)
-        self.list.append(res)     		
+        self.list.append(res)
         self['list'].list = self.list
 
     def quit(self):
@@ -193,12 +193,12 @@ class DownloadOnLineImage(Screen):
     def __init__(self, session, distro, mbimageversion):
         Screen.__init__(self, session)
         self.session = session
-	global ImageVersion				   
+	global ImageVersion
         ImageVersion = mbimageversion
         distri = getBrandOEM() 
         boxname = getBoxType()
 	if boxname == "twinboxlcdci5":
-	    boxname = "twinboxlcd" 	
+	    boxname = "twinboxlcd"
         Screen.setTitle(self, _('OPDBoot - Download Image'))
         self['key_green'] = Button(_('Install'))
         self['key_red'] = Button(_('Exit'))
@@ -208,10 +208,10 @@ class DownloadOnLineImage(Screen):
         self.imagePath = '/media/opdboot/OPDBootUpload'
         global BRANDOEM
         global BRANDOEMDROID
-        global MASCHINEBUILD       		
+        global MASCHINEBUILD 
 	BRANDOEM = getBrandOEM()
         BRANDOEMDROID = getBrandOEM()
-        MASCHINEBUILD = boxname						   
+        MASCHINEBUILD = boxname
         if boxname in ('ax51', 'triplex'):
             BRANDOEM = 'ax'
         elif boxname in ('gb800seplus', 'gbquadplus', 'gbquad4k', 'gbue4k', 'gbultraue', 'gbx1', 'gbx2', 'gbx3'):
@@ -244,8 +244,10 @@ class DownloadOnLineImage(Screen):
             BRANDOEMDROID = 'Edision'
             MASCHINEBUILD = boxname
         elif boxname in ('vusolo4k'):
-            BRANDOEMDROID = 'VU+'                                               
-            MASCHINEBUILD = boxname			
+            BRANDOEMDROID = 'VU+'
+        elif boxname in ('h7', 'h3', 'h5', 'h9'):
+            BRANDOEMDROID = 'Zgemma'
+            MASCHINEBUILD = boxname
         self.distro = distro
         if self.distro == 'egami':
             self.feed = 'egami'
@@ -265,7 +267,7 @@ class DownloadOnLineImage(Screen):
         elif self.distro == 'opendroid':
             self.feed = 'opendroid'
             self.feedurl = 'http://images.opendroid.org/%s' %ImageVersion
-	elif self.distro == 'openpli':							  
+	elif self.distro == 'openpli':
             self.feed = 'openpli'
             self.feedurl = 'http://openpli.org/download'
         elif self.distro == 'hdmu':
@@ -293,7 +295,7 @@ class DownloadOnLineImage(Screen):
             self.feedurl = 'http://sgcpm.com/satdreamgr-images-experimental/%s/%s' % (distri.lower(), boxname)                
         else:
             self.feed = 'opennfr'
-            self.feedurl = 'http://dev.nachtfalke.biz/nfr/feeds/6.2/images'
+            self.feedurl = 'http://dev.nachtfalke.biz/nfr/feeds/6.0/images'
         self['imageList'] = MenuList(self.imagelist)
         self['actions'] = ActionMap(['OkCancelActions', 'ColorActions'], {'green': self.green,
          'red': self.quit,
@@ -362,7 +364,7 @@ class DownloadOnLineImage(Screen):
                             if box == "sf4008":
                                 if box and "images/arm" in line:
                                     stb = '1'
-                                    break                                
+                                    break
                             else:
                                 if box and "images/mips" in line:
                                     stb = '1'
@@ -382,7 +384,7 @@ class DownloadOnLineImage(Screen):
                                 stb = '1'
                                 break
             except:
-                    stb = 'no Image for this Box on this Side'  					
+                    stb = 'no Image for this Box on this Side'
         if self.distro == 'opendroid':
             if box == "ax51":
 	            box = "mutant51"
@@ -549,7 +551,7 @@ class DownloadOnLineImage(Screen):
                elif box in ('osmega'):
                     box = 'osmega'
                     urlbox = 'edision/OS+mega/' 
-                    stb = '1'                                          
+                    stb = '1' 
                elif box in ('spycatmini'):
                     box = 'spycatmini'
                     urlbox = 'spycat/Spycat+Mini/' 
@@ -557,13 +559,13 @@ class DownloadOnLineImage(Screen):
                elif box in ('spycatminiplus'):
                     box = 'spycatminiplus'
                     urlbox = 'spycat/Spycat+Mini+Plus/' 
-                    stb = '1'                    
+                    stb = '1'
                elif box in ('spycat'):
                     box = 'spycat'
                     urlbox = 'spycat/Spycat/' 
-                    stb = '1'                      
+                    stb = '1'
             else:   
-                stb = 'no Image for this Box on this Side'        
+                stb = 'no Image for this Box on this Side'
         return (box, urlbox, stb)
 
     def green(self, ret = None):
@@ -616,7 +618,7 @@ class DownloadOnLineImage(Screen):
 
             f = open(file_name, 'wb')
             f.close()
-            try:		
+            try:
                 meta = u.info()
                 file_size = int(meta.getheaders('Content-Length')[0])
                 print 'Downloading: %s Bytes: %s' % (sel, file_size)
@@ -628,7 +630,7 @@ class DownloadOnLineImage(Screen):
                 return
             except:
                 self.session.open(MessageBox, _('The URL to this image is not correct !!'), type=MessageBox.TYPE_ERROR)
-                self.close()    	
+                self.close()
 
     def ImageDownloadCB(self, ret):
         if ret:
@@ -661,10 +663,10 @@ class DownloadOnLineImage(Screen):
         self.imagelist = []
         if stb != '1':
             url = self.feedurl
-        if self.distro in ('openatv-6.2', 'openeight'):
+        if self.distro in ('openatv-6.0', 'openeight'):
             url = '%s/index.php?open=%s' % (self.feedurl, box)
         elif self.distro == 'egami':
-            url = '%s/index.php?open=%s' % (self.feedurl, urlbox)			
+            url = '%s/index.php?open=%s' % (self.feedurl, urlbox)
         elif self.distro == 'openvix':
             url = '%s/openvix-builds/%s' % (self.feedurl, urlbox)
         elif self.distro == 'opendroid':
@@ -676,7 +678,7 @@ class DownloadOnLineImage(Screen):
         elif self.distro == 'openhdf':
             url = '%s/%s' % (self.feedurl1, box)
         elif self.distro == 'hdmu':
-            url = '%sbox=%s' % (self.feedurl, box)              
+            url = '%sbox=%s' % (self.feedurl, box)
         elif self.distro == 'pure2':
             url = '%s' % (self.feedurl1)               
 	else:
@@ -696,9 +698,7 @@ class DownloadOnLineImage(Screen):
         except urllib2.HTTPError as e:
             print 'HTTP download ERROR: %s' % e.code
             return
-
         lines = the_page.split('\n')
-        
         tt = len(box)
         if stb == '1':
             for line in lines:
@@ -744,7 +744,7 @@ class DownloadOnLineImage(Screen):
                 elif line.find("<a href='") > -1:
                     t4 = line.find('egami-')
                     t5 = line.find('.zip"')
-                    self.imagelist.append(line[t4 :t5+4])    		
+                    self.imagelist.append(line[t4 :t5+4])
                 elif line.find('href="opennfr-') > -1:
                     t4 = line.find('opennfr-')
                     t5 = line.find('.zip"')
@@ -765,7 +765,7 @@ class DownloadOnLineImage(Screen):
         else:
             self.imagelist.append(stb)
         if "" in self.imagelist:
-            self.imagelist.remove('')		
+            self.imagelist.remove('')
         self['imageList'].l.setList(self.imagelist)
 
 
@@ -831,5 +831,4 @@ class ImageDownloadTask(Task):
             self.finish(aborted=True)
         else:
             Task.processFinished(self, 0)
-
 
