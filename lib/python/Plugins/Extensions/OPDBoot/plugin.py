@@ -50,7 +50,7 @@ class OPDBootInstallation(Screen):
         self.updateList()
 
     def updateList(self):
-        mycf, myusb, myusb2, myusb3, mysd, myhdd, mymmc = ('', '', '', '', '', '')
+        mycf, myusb, myusb2, myusb3, mysd, myhdd, mymmc = ('', '', '', '', '', '', '')
         myoptions = []
         if fileExists('/proc/mounts'):
             fileExists('/proc/mounts')
@@ -71,12 +71,12 @@ class OPDBootInstallation(Screen):
                 if line.find('/media/card') != -1:
                     mysd = '/media/card/'
                     continue
-                if line.find('/media/mmc') != -1:
-                    mymmc = '/media/mmc/'
-                    continue
                 if line.find('/hdd') != -1:
                     myhdd = '/media/hdd/'
                     continue
+		if line.find('/media/mmc') != -1:
+                    mymmc = '/media/mmc/'
+		    continue
 
             f.close()
         else:
@@ -90,10 +90,6 @@ class OPDBootInstallation(Screen):
             self.list.append(myusb)
         else:
             myusb
-        if mymmc:
-            self.list.append(mymmc)
-        else:
-            mymmc
         if myusb2:
             self.list.append(myusb2)
         else:
@@ -112,6 +108,10 @@ class OPDBootInstallation(Screen):
             self.list.append(myhdd)
         else:
             myhdd
+	if mymmc:
+            self.list.append(mymmc)
+        else:
+            mymmc
         self['config'].setList(self.list)
 
     def devpanel(self):
@@ -167,22 +167,10 @@ class OPDBootInstallation(Screen):
             fileExists('/proc/mounts')
             f = open('/proc/mounts', 'r')
             for line in f.readlines():
-                if line.find('/media/cf') != -1:
-                    check = True
-                    continue
                 if line.find('/media/usb') != -1:
                     check = True
                     continue
                 if line.find('/media/mmc') != -1:
-                    check = True
-                    continue
-                if line.find('/media/usb2') != -1:
-                    check = True
-                    continue
-                if line.find('/media/usb3') != -1:
-                    check = True
-                    continue
-                if line.find('/media/card') != -1:
                     check = True
                     continue
                 if line.find('/hdd') != -1:
@@ -344,7 +332,7 @@ class OPDBootImageChoose(Screen):
          'green': self.install,
          'yellow': self.remove,
          'blue': self.advanced,
-         'menu': self.bootsetup,         
+         'menu': self.bootsetup,
          'back': self.close})
         self.onShow.append(self.updateList)
         
