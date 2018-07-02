@@ -117,8 +117,8 @@ class OPDBootInstallation(Screen):
     def devpanel(self):
         try:
 
-            from OPENDROID.MountManager import DeviceManager
-            self.session.open(DeviceManager)
+            from OPENDROID.HddSetup import HddSetup
+            self.session.open(HddSetup)
         except:
             self.session.open(MessageBox, _('You are not running opendroid Image. You must mount devices Your self.'), MessageBox.TYPE_INFO)
 
@@ -167,13 +167,25 @@ class OPDBootInstallation(Screen):
             fileExists('/proc/mounts')
             f = open('/proc/mounts', 'r')
             for line in f.readlines():
+                if line.find('/media/cf') != -1:
+                    check = True
+                    continue
                 if line.find('/media/usb') != -1:
                     check = True
                     continue
-                if line.find('/media/mmc') != -1:
+                if line.find('/media/usb2') != -1:
+                    check = True
+                    continue
+                if line.find('/media/usb3') != -1:
+                    check = True
+                    continue
+                if line.find('/media/card') != -1:
                     check = True
                     continue
                 if line.find('/hdd') != -1:
+                    check = True
+                    continue
+                if line.find('/media/mmc') != -1:
                     check = True
                     continue
 
@@ -191,7 +203,7 @@ class OPDBootInstallation(Screen):
                 ybox.setTitle(_('Install Confirmation'))
             else:
                 self.close()
-                
+
     def install2(self, yesno):
 	config.OPDBootmanager = ConfigSubsection()
 	config.OPDBootmanager.bootmanagertimeout = ConfigSelection([('5',_("5 seconds")),('10',_("10 seconds")),('15',_("15 seconds")),('20',_("20 seconds")),('30',_("30 seconds"))], default='5')	
@@ -236,7 +248,7 @@ class OPDBootInstallation(Screen):
             os.system('mv /etc/init.d/volatile-media.sh /etc/init.d/volatile-media.sh.back')
             out3 = open('/media/opdboot/OPDBootI/.timer', 'w')
             out3.write(config.OPDBootmanager.bootmanagertimeout.value)
-            out3.close()	
+            out3.close()
             out2 = open('/media/opdboot/OPDBootI/.opdboot', 'w')
             out2.write('Flash')
             out2.close()
@@ -316,7 +328,7 @@ class OPDBootImageChoose(Screen):
         self['key_green'] = Label(_('Install Image'))
         self['key_yellow'] = Label(_('Remove Image '))
         self['key_blue'] = Label(_('Uninstall'))
-        self['key_menu'] = Label(_('Bootsetup'))        
+        self['key_menu'] = Label(_('Bootsetup'))
         self['label2'] = Label(_('OPDBoot is running from:'))
         self['label3'] = Label(_('Used:'))
         self['label4'] = Label(_('Available:'))
@@ -335,7 +347,7 @@ class OPDBootImageChoose(Screen):
          'menu': self.bootsetup,
          'back': self.close})
         self.onShow.append(self.updateList)
-        
+
     def bootsetup(self):
         menulist = []
         if getMachineBuild() not in ("u5", "u51", "u52", "u53", "u5pvr"):
@@ -361,7 +373,7 @@ class OPDBootImageChoose(Screen):
                 cmd1 = 'chmod 777 /sbin/opdinit;chmod 777 /sbin/init;ln -sfn /sbin/opdinit /sbin/init'
                 self.session.openWithCallback(self.updateList, Console, _('OPDBoot work without Bootmanager by Booting!'), [cmd0, cmd1])
             if choice[1] == 'bootmanagertimeout':
-                self.session.openWithCallback(self.setupDone, Setup, 'bootmanagertimeout', 'Extensions/Infopanel')
+                self.session.openWithCallback(self.setupDone, Setup, 'bootmanagertimeout', '/usr/lib/enigma2/python/OPENDROID')
 	    return 
 
     def setupDone(self, test=None):
@@ -370,7 +382,7 @@ class OPDBootImageChoose(Screen):
             config.OPDBootmanager.bootmanagertimeout.save()
             out3 = open('/media/opdboot/OPDBootI/.timer', 'w')
             out3.write(config.OPDBootmanager.bootmanagertimeout.value)
-            out3.close()            
+            out3.close()
         else:
             config.OPDBootmanager.bootmanagertimeout.save()
             out3 = open('/media/opdboot/OPDBootI/.timer', 'w')
@@ -388,8 +400,14 @@ class OPDBootImageChoose(Screen):
             mypath = '/media/hdd'
 
         icon = 'dev_usb.png'
-	if 'hdd' in mypath:
-            icon = 'dev_hdd.png'
+        if 'card' in mypath or 'sd' in mypath:
+            icon = 'dev_sd.png'
+        else:
+            if 'hdd' in mypath:
+                icon = 'dev_hdd.png'
+            else:
+                if 'cf' in mypath:
+                    icon = 'dev_cf.png'
         icon = pluginpath + '/images/' + icon
         png = LoadPixmap(icon)
         self['device_icon'].instance.setPixmap(png)
@@ -629,18 +647,7 @@ class OPDBootImageChoose(Screen):
                 cmd7 = 'rm /media/opdboot/OPDBootI/.Flash'
                 cmd8 = 'rm /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location'
                 cmd8a = "echo -e '\n\nOPDBoot remove complete....'"
-                self.session.openWithCallback(self.close, Console, _('OPDBoot is removing...'), [cmd0,
-                 cmd1,
-                 cmd1a,
-                 cmd2,
-                 cmd3,
-                 cmd4,
-                 cmd4a,
-                 cmd5,
-                 cmd6,
-                 cmd7,
-                 cmd8,
-                 cmd8a])
+                self.session.openWithCallback(self.close, Console, _('OPDBoot is removing...'), [cmd0, cmd1, cmd1a, cmd2, cmd3, cmd4, cmd4a, cmd5, cmd6, cmd7, cmd8, cmd8a])
             if choice[1] == 'rmallimg':
                 cmd = "echo -e '\n\nOPDBoot deleting images..... '"
                 cmd1 = 'rm -rf /media/opdboot/OPDBootI/*'
@@ -766,7 +773,7 @@ class OPDBootImageInstall(Screen, ConfigListScreen):
                  str(self.zipdelete.value),
                  getImageFolder(),
                  getMachineRootFile(),
-                 getImageArch())						   
+                 getImageArch())
                 print '[OPD-BOOT]: ', cmd
                 self.session.open(Console, _('OPDBoot: Install new image'), [message, cmd])
 
